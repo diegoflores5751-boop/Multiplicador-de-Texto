@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiplicador de Texto PRO</title>
     <!-- Favicon Instantáneo -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
     <style>
         /* ==========================================
-           ESTILOS VISUALES (CSS)
+           1. ESTILOS BASE Y CONTENEDOR
            ========================================== */
         * {
             box-sizing: border-box;
@@ -18,7 +18,7 @@
         }
 
         body {
-            background-color: #f3f4f6; /* Fondo gris muy claro y profesional */
+            background-color: #f3f4f6;
             color: #333333;
             display: flex;
             justify-content: center;
@@ -28,12 +28,12 @@
         }
 
         .contenedor-principal {
-            background-color: #ffffff; /* Tarjeta blanca limpia */
+            background-color: #ffffff;
             width: 100%;
             max-width: 600px;
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Sombra suave y moderna */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
 
         .titulo {
@@ -50,9 +50,10 @@
             margin-bottom: 25px;
         }
 
-        .grupo-entrada {
-            margin-bottom: 15px;
-        }
+        /* ==========================================
+           2. ESTILOS DE FORMULARIO
+           ========================================== */
+        .grupo-entrada { margin-bottom: 15px; }
 
         label {
             display: block;
@@ -62,7 +63,7 @@
             color: #374151;
         }
 
-        textarea, input, select {
+        textarea, input {
             width: 100%;
             padding: 12px;
             border: 1px solid #d1d5db;
@@ -72,14 +73,8 @@
             transition: border-color 0.3s;
         }
 
-        textarea:focus, input:focus, select:focus {
-            border-color: #2563eb; /* Borde azul al hacer clic */
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
+        textarea:focus, input:focus { border-color: #2563eb; }
+        textarea { resize: vertical; min-height: 100px; }
 
         .fila-controles {
             display: flex;
@@ -87,9 +82,75 @@
             margin-bottom: 20px;
         }
 
+        /* ==========================================
+           3. MENÚ DESPLEGABLE PERSONALIZADO (PRO)
+           ========================================== */
+        .select-personalizado {
+            position: relative;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            background-color: #fff;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.3s;
+        }
+
+        .select-personalizado.activo {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        .flecha-icono {
+            font-size: 12px;
+            color: #6b7280;
+            transition: transform 0.3s;
+        }
+
+        .select-personalizado.activo .flecha-icono {
+            transform: rotate(180deg);
+        }
+
+        .lista-opciones {
+            position: absolute;
+            top: 105%;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            list-style: none;
+            display: none;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        .select-personalizado.activo .lista-opciones {
+            display: block;
+        }
+
+        .lista-opciones li {
+            padding: 12px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .lista-opciones li:hover {
+            background-color: #eff6ff;
+            color: #2563eb;
+        }
+
+        /* ==========================================
+           4. BOTONES
+           ========================================== */
         .boton-primario {
             width: 100%;
-            background-color: #2563eb; /* Azul vibrante profesional */
+            background-color: #2563eb;
             color: white;
             border: none;
             padding: 14px;
@@ -100,14 +161,11 @@
             transition: background-color 0.3s;
             margin-bottom: 20px;
         }
-
-        .boton-primario:hover {
-            background-color: #1d4ed8;
-        }
+        .boton-primario:hover { background-color: #1d4ed8; }
 
         .boton-secundario {
             width: 100%;
-            background-color: #10b981; /* Verde éxito para copiar */
+            background-color: #10b981;
             color: white;
             border: none;
             padding: 12px;
@@ -117,10 +175,72 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+        .boton-secundario:hover { background-color: #059669; }
 
-        .boton-secundario:hover {
-            background-color: #059669;
+        /* ==========================================
+           5. VENTANA EMERGENTE (MODAL) SIN ALERTAS FEAS
+           ========================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(3px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 100;
         }
+
+        .modal-overlay.mostrar {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-caja {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            width: 90%;
+            max-width: 350px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.mostrar .modal-caja {
+            transform: scale(1);
+        }
+
+        .modal-icono {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .modal-texto {
+            font-size: 16px;
+            color: #374151;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .boton-modal {
+            background-color: #374151;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .boton-modal:hover { background-color: #1f2937; }
+
     </style>
 </head>
 <body>
@@ -142,14 +262,20 @@
                 <label for="cantidad">2. ¿Cuántas veces?:</label>
                 <input type="number" id="cantidad" value="10" min="1" max="100000">
             </div>
+            
+            <!-- NUEVO MENÚ DESPLEGABLE CON DISEÑO -->
             <div class="grupo-entrada" style="flex: 1;">
-                <label for="separador">3. Separar por:</label>
-                <select id="separador">
-                    <option value="espacio">Espacio</option>
-                    <option value="salto">Salto de línea</option>
-                    <option value="coma">Coma (,)</option>
-                    <option value="nada">Sin separación</option>
-                </select>
+                <label>3. Separar por:</label>
+                <div class="select-personalizado" id="contenedor-separador">
+                    <span id="texto-separador">Espacio</span>
+                    <span class="flecha-icono">▼</span>
+                    <ul class="lista-opciones">
+                        <li data-valor="espacio">Espacio</li>
+                        <li data-valor="salto">Salto de línea</li>
+                        <li data-valor="coma">Coma (,)</li>
+                        <li data-valor="nada">Sin separación</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -163,66 +289,112 @@
         <button id="btn-copiar" class="boton-secundario">📋 Copiar al Portapapeles</button>
     </div>
 
+    <!-- NUEVA VENTANA EMERGENTE (MODAL) -->
+    <div id="modal-sistema" class="modal-overlay">
+        <div class="modal-caja">
+            <div id="modal-icono" class="modal-icono">⚠️</div>
+            <p id="modal-mensaje" class="modal-texto"></p>
+            <button id="btn-cerrar-modal" class="boton-modal">Entendido</button>
+        </div>
+    </div>
+
     <!-- ==========================================
          LÓGICA DEL SISTEMA (JAVASCRIPT)
          ========================================== -->
     <script>
-        // Referencias a los elementos de la pantalla
+        // Referencias principales
         const txtOrigen = document.getElementById('texto-origen');
         const numCantidad = document.getElementById('cantidad');
-        const selSeparador = document.getElementById('separador');
         const btnGenerar = document.getElementById('btn-generar');
         const txtResultado = document.getElementById('texto-resultado');
         const btnCopiar = document.getElementById('btn-copiar');
 
-        // Función principal para multiplicar el texto
+        // Referencias de la Ventana Emergente (Modal)
+        const modalSistema = document.getElementById('modal-sistema');
+        const modalMensaje = document.getElementById('modal-mensaje');
+        const modalIcono = document.getElementById('modal-icono');
+        const btnCerrarModal = document.getElementById('btn-cerrar-modal');
+
+        // Referencias del Menú Desplegable Personalizado
+        const contenedorSeparador = document.getElementById('contenedor-separador');
+        const textoSeparador = document.getElementById('texto-separador');
+        const opcionesSeparador = document.querySelectorAll('.lista-opciones li');
+        let separadorActual = "espacio"; // Valor por defecto
+
+        // LÓGICA: Menú Desplegable
+        contenedorSeparador.addEventListener('click', () => {
+            contenedorSeparador.classList.toggle('activo');
+        });
+
+        opcionesSeparador.forEach(opcion => {
+            opcion.addEventListener('click', (e) => {
+                textoSeparador.innerText = e.target.innerText;
+                separadorActual = e.target.getAttribute('data-valor');
+            });
+        });
+
+        // Cerrar el menú si se hace clic fuera de él
+        document.addEventListener('click', (e) => {
+            if (!contenedorSeparador.contains(e.target)) {
+                contenedorSeparador.classList.remove('activo');
+            }
+        });
+
+        // LÓGICA: Función para mostrar alertas con diseño
+        function mostrarAlerta(mensaje, tipo = "advertencia") {
+            modalMensaje.innerText = mensaje;
+            if (tipo === "advertencia") {
+                modalIcono.innerText = "⚠️";
+            } else if (tipo === "error") {
+                modalIcono.innerText = "❌";
+            }
+            modalSistema.classList.add('mostrar');
+        }
+
+        btnCerrarModal.addEventListener('click', () => {
+            modalSistema.classList.remove('mostrar');
+        });
+
+        // LÓGICA: Generar Texto
         btnGenerar.addEventListener('click', () => {
             const texto = txtOrigen.value;
             const repeticiones = parseInt(numCantidad.value);
             
-            // Validar que el usuario haya escrito algo
             if (texto.trim() === "") {
-                alert("Por favor, escribe un texto primero.");
+                mostrarAlerta("Por favor, escribe un texto primero antes de generar.");
                 return;
             }
 
-            // Identificar qué separador eligió el usuario
             let caracterSeparador = "";
-            if (selSeparador.value === "espacio") caracterSeparador = " ";
-            if (selSeparador.value === "salto") caracterSeparador = "\n";
-            if (selSeparador.value === "coma") caracterSeparador = ", ";
+            if (separadorActual === "espacio") caracterSeparador = " ";
+            if (separadorActual === "salto") caracterSeparador = "\n";
+            if (separadorActual === "coma") caracterSeparador = ", ";
 
-            // Lógica de duplicación utilizando un Array (Más rápido y eficiente)
             const arregloTextos = Array(repeticiones).fill(texto);
-            const resultadoFinal = arregloTextos.join(caracterSeparador);
-
-            // Mostrar el resultado
-            txtResultado.value = resultadoFinal;
+            txtResultado.value = arregloTextos.join(caracterSeparador);
         });
 
-        // Función para copiar el texto con un solo clic
+        // LÓGICA: Copiar al Portapapeles
         btnCopiar.addEventListener('click', () => {
             if (txtResultado.value === "") {
-                alert("No hay texto para copiar.");
+                mostrarAlerta("No hay ningún resultado para copiar. Genera el texto primero.");
                 return;
             }
 
-            // Copiar al portapapeles
             txtResultado.select();
             navigator.clipboard.writeText(txtResultado.value)
                 .then(() => {
-                    // Cambiar el texto del botón temporalmente para dar retroalimentación
                     const textoOriginal = btnCopiar.innerText;
-                    btnCopiar.innerText = "✅ ¡Texto Copiado!";
-                    btnCopiar.style.backgroundColor = "#059669"; // Verde más oscuro
+                    btnCopiar.innerText = "✅ ¡Texto Copiado con Éxito!";
+                    btnCopiar.style.backgroundColor = "#059669"; 
                     
                     setTimeout(() => {
                         btnCopiar.innerText = textoOriginal;
-                        btnCopiar.style.backgroundColor = "#10b981"; // Volver al verde original
+                        btnCopiar.style.backgroundColor = "#10b981"; 
                     }, 2000);
                 })
                 .catch(() => {
-                    alert("Hubo un error al intentar copiar.");
+                    mostrarAlerta("No se pudo copiar el texto automáticamente.", "error");
                 });
         });
     </script>
