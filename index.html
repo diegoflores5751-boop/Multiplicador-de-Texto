@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplicador de Texto PRO</title>
+    <style>
+        /* ==========================================
+           ESTILOS VISUALES (CSS)
+           ========================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f3f4f6; /* Fondo gris muy claro y profesional */
+            color: #333333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .contenedor-principal {
+            background-color: #ffffff; /* Tarjeta blanca limpia */
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Sombra suave y moderna */
+        }
+
+        .titulo {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: #111827;
+        }
+
+        .subtitulo {
+            text-align: center;
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        .grupo-entrada {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #374151;
+        }
+
+        textarea, input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus, input:focus, select:focus {
+            border-color: #2563eb; /* Borde azul al hacer clic */
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .fila-controles {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .boton-primario {
+            width: 100%;
+            background-color: #2563eb; /* Azul vibrante profesional */
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .boton-primario:hover {
+            background-color: #1d4ed8;
+        }
+
+        .boton-secundario {
+            width: 100%;
+            background-color: #10b981; /* Verde éxito para copiar */
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .boton-secundario:hover {
+            background-color: #059669;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================
+         ESTRUCTURA DE LA PÁGINA (HTML)
+         ========================================== -->
+    <div class="contenedor-principal">
+        <h1 class="titulo">Multiplicador de Texto</h1>
+        <p class="subtitulo">Duplica tus frases al instante y sin límites</p>
+
+        <div class="grupo-entrada">
+            <label for="texto-origen">1. Escribe tu texto:</label>
+            <textarea id="texto-origen" placeholder="Ejemplo: Hola Mundo..."></textarea>
+        </div>
+
+        <div class="fila-controles">
+            <div class="grupo-entrada" style="flex: 1;">
+                <label for="cantidad">2. ¿Cuántas veces?:</label>
+                <input type="number" id="cantidad" value="10" min="1" max="100000">
+            </div>
+            <div class="grupo-entrada" style="flex: 1;">
+                <label for="separador">3. Separar por:</label>
+                <select id="separador">
+                    <option value="espacio">Espacio</option>
+                    <option value="salto">Salto de línea</option>
+                    <option value="coma">Coma (,)</option>
+                    <option value="nada">Sin separación</option>
+                </select>
+            </div>
+        </div>
+
+        <button id="btn-generar" class="boton-primario">Generar Texto</button>
+
+        <div class="grupo-entrada">
+            <label for="texto-resultado">Resultado:</label>
+            <textarea id="texto-resultado" readonly placeholder="Aquí aparecerá tu texto multiplicado..."></textarea>
+        </div>
+
+        <button id="btn-copiar" class="boton-secundario">📋 Copiar al Portapapeles</button>
+    </div>
+
+    <!-- ==========================================
+         LÓGICA DEL SISTEMA (JAVASCRIPT)
+         ========================================== -->
+    <script>
+        // Referencias a los elementos de la pantalla
+        const txtOrigen = document.getElementById('texto-origen');
+        const numCantidad = document.getElementById('cantidad');
+        const selSeparador = document.getElementById('separador');
+        const btnGenerar = document.getElementById('btn-generar');
+        const txtResultado = document.getElementById('texto-resultado');
+        const btnCopiar = document.getElementById('btn-copiar');
+
+        // Función principal para multiplicar el texto
+        btnGenerar.addEventListener('click', () => {
+            const texto = txtOrigen.value;
+            const repeticiones = parseInt(numCantidad.value);
+            
+            // Validar que el usuario haya escrito algo
+            if (texto.trim() === "") {
+                alert("Por favor, escribe un texto primero.");
+                return;
+            }
+
+            // Identificar qué separador eligió el usuario
+            let caracterSeparador = "";
+            if (selSeparador.value === "espacio") caracterSeparador = " ";
+            if (selSeparador.value === "salto") caracterSeparador = "\n";
+            if (selSeparador.value === "coma") caracterSeparador = ", ";
+
+            // Lógica de duplicación utilizando un Array (Más rápido y eficiente)
+            const arregloTextos = Array(repeticiones).fill(texto);
+            const resultadoFinal = arregloTextos.join(caracterSeparador);
+
+            // Mostrar el resultado
+            txtResultado.value = resultadoFinal;
+        });
+
+        // Función para copiar el texto con un solo clic
+        btnCopiar.addEventListener('click', () => {
+            if (txtResultado.value === "") {
+                alert("No hay texto para copiar.");
+                return;
+            }
+
+            // Copiar al portapapeles
+            txtResultado.select();
+            navigator.clipboard.writeText(txtResultado.value)
+                .then(() => {
+                    // Cambiar el texto del botón temporalmente para dar retroalimentación
+                    const textoOriginal = btnCopiar.innerText;
+                    btnCopiar.innerText = "✅ ¡Texto Copiado!";
+                    btnCopiar.style.backgroundColor = "#059669"; // Verde más oscuro
+                    
+                    setTimeout(() => {
+                        btnCopiar.innerText = textoOriginal;
+                        btnCopiar.style.backgroundColor = "#10b981"; // Volver al verde original
+                    }, 2000);
+                })
+                .catch(() => {
+                    alert("Hubo un error al intentar copiar.");
+                });
+        });
+    </script>
+</body>
+</html>
