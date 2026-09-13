@@ -4,8 +4,8 @@
 
 ## 🔗 Enlaces Rápidos
 
-* **🌐 Usar la herramienta en vivo:** [Haz clic aquí para abrir el Multiplicador](URL_DE_TU_PAGINA_GITHUB_PAGES)
-* **💻 Descargar el código fuente:** [Haz clic aquí para ir a los archivos](URL_DE_TU_REPOSITORIO)
+* **🌐 Usar la herramienta en vivo:** [Haz clic aquí para abrir el Multiplicador](https://sistemastech-dev.github.io/Multiplicador-de-Texto/)
+* **💻 Descargar el código fuente:** [Haz clic aquí para ir a los archivos](https://github.com/sistemastech-dev/Multiplicador-de-Texto/blob/main/index.html)
 
 ## 🚀 Características Principales
 
